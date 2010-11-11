@@ -1,0 +1,223 @@
+/* RESET ===================================================================================== */
+
+html, body {font-size:100%}
+html,body,h1,h2,h3,h4,h5,form,fieldset,ul,li {margin:0; padding:0}
+h1,h2,h3,h4,h5 {font-weight:normal}
+:focus, :active {outline:0}
+blockquote {font-style:italic}
+a img, fieldset {border:0}
+button, #submit {cursor:pointer}
+fieldset, input, textarea, pre {font-family:inherit}
+
+/* BASIC FORMS =============================================================================== */
+
+legend {display:none}
+label {display:block; margin:0 0 5px 0}
+input, textarea {width:100%; border:1px dotted #999; background:#fff; padding:3px}
+input:focus, textarea:focus {border:1px solid #666}
+#submit {display:inline; padding:5px; margin:5px 0 0 0; color:#fff; background:#060; border:0}
+#submit:focus {background:#090}
+
+/* LAYOUT =============================================================================== */
+
+body {
+font-family:arial, sans-serif;
+color:#222;
+padding:0 0 20px 0;
+}
+
+#header {
+height:85px;
+background:#4e2f91;
+border-bottom:3px solid #35157c;
+color:#fff;
+}
+
+h1 {
+padding:10px 0 0;
+}
+
+h1 span {
+display:block;
+height:0;
+overflow:hidden;
+}
+
+h2#title {
+font-size:24px;
+font-family:georgia, serif;
+font-style:italic;
+}
+
+div#status {
+display:none;
+}
+
+#nav {
+background:#b897e3;
+margin:0 0 20px 0;
+}
+
+#nav-inner {
+padding:5px 0;
+}
+
+#nav-inner ul {
+list-style:none;
+text-align:right;
+}
+
+#nav-inner ul li a {
+color:#222;
+text-decoration:none;
+font-size:20px;
+}
+
+#nav-inner ul li a:hover {
+color:#fff;
+}
+
+#header-inner, #content, #status, #nav-inner {
+width:900px;
+margin:0 auto;
+}
+
+#title-and-lorem {
+width:900px;
+margin:0 auto 20px auto;
+}
+
+#status {
+padding:10px 10px 10px 32px;
+margin:0 auto 20px auto;
+background:#ebe7d6 url(../images/bulb.png) no-repeat left center;
+border:2px solid #b6b3a5;
+width:858px;
+color:#b6b3a5;
+}
+
+.dataset {
+float : left;
+border : 1px solid grey;
+margin : 4px;
+padding : 4px;
+}
+
+.dataset ul.observation_groups {
+padding : 5px;
+height : 250px;
+overflow : auto;
+}
+
+.selected {
+background-color: grey;
+}
+
+.area_id, .dataset_id, span.uri, .pop {
+display : none;
+}
+
+#footer {
+clear : both;
+}
+
+div.dsd-details {
+position:relative;
+}
+
+div.dsd-details .load {
+position:absolute;
+right:10px;
+bottom:10px;
+}
+
+.dsd-details {
+padding:20px !important;
+}
+
+.dsd-details ul {
+list-style:inside square;
+font-size:14px;
+}
+
+.dsd-details ul li {
+font-weight:bold;
+}
+
+.dsd-details ul li em {
+font-weight:normal;
+font-family:georgia, serif;
+}
+
+.dsd-details h4 {
+font-size:20px;
+font-family:georgia;
+font-style:italic;
+border-bottom:1px solid #b6b3a5;
+margin:10px 0;
+}
+
+/* VISUALISATIONS */
+
+div#visualisation {
+background:transparent;
+height:400px;
+overflow:hidden;
+padding:0 0 0 140px;
+}
+
+div#visualisation.empty{
+background:#fff url(../images/dummy_graph.gif) no-repeat center center;
+}
+
+div.dataset {
+border:0;
+}
+
+div.dataset ul {
+padding:20px !important;
+}
+
+div.dataset h3 {
+font-size:24px;
+min-height:60px;
+font-family:georgia, serif;
+font-style:italic;
+margin:0 0 10px 0;
+}
+
+div.dataset h4 {
+padding:0 0 0 30px;
+}
+
+div.dataset li {
+margin:0 0 10px 0;
+font-size:14px;
+}
+
+div.dataset li em {
+font-family:georgia, serif;
+padding:0 0 0 5px
+}
+
+h4.group_header {
+position:relative;
+height:40px;
+line-height:40px;
+}
+
+h4.selected {
+background:#336633;
+}
+
+button.group_select {
+position:absolute;
+top:0;
+right:-2px;
+height:40px;
+border:0;
+}
+
+h4.selected button.group_select {
+background:#336633 !important;
+}
