@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Young Lives Comparator</title>
+
+<link rel="stylesheet" type="text/css" href="./themes/custom-theme/jquery-ui-1.8.6.custom.css"/>
+
+<style type="text/css">
+
+/* RESET ===================================================================================== */
+
+html, body {font-size:100%}
+html,body,h1,h2,h3,h4,h5,form,fieldset,ul,li {margin:0; padding:0}
+h1,h2,h3,h4,h5 {font-weight:normal}
+:focus, :active {outline:0}
+blockquote {font-style:italic}
+a img, fieldset {border:0}
+button, #submit {cursor:pointer}
+fieldset, input, textarea, pre {font-family:inherit}
+
+/* BASIC FORMS =============================================================================== */
+
+legend {display:none}
+label {display:block; margin:0 0 5px 0}
+input, textarea {width:100%; border:1px dotted #999; background:#fff; padding:3px}
+input:focus, textarea:focus {border:1px solid #666}
+#submit {display:inline; padding:5px; margin:5px 0 0 0; color:#fff; background:#060; border:0}
+#submit:focus {background:#090}
+
+/* LAYOUT =============================================================================== */
+
+body {
+font-family:arial, sans-serif;
+color:#222;
+padding:0 0 20px 0;
+}
+
+#header {
+height:85px;
+background:#4e2f91;
+border-bottom:3px solid #35157c;
+color:#fff;
+}
+
+h1 {
+padding:10px 0 0;
+}
+
+h1 span {
+display:block;
+height:0;
+overflow:hidden;
+}
+
+h2#title {
+font-size:24px;
+font-family:georgia, serif;
+font-style:italic;
+}
+
+div#status {
+display:none;
+}
+
+#nav {
+background:#b897e3;
+margin:0 0 20px 0;
+}
+
+#nav-inner {
+padding:5px 0;
+}
+
+#nav-inner ul {
+list-style:none;
+text-align:right;
+}
+
+#nav-inner ul li a {
+color:#222;
+text-decoration:none;
+font-size:20px;
+}
+
+#nav-inner ul li a:hover {
+color:#fff;
+}
+
+#header-inner, #content, #status, #nav-inner {
+width:900px;
+margin:0 auto;
+}
+
+#title-and-lorem {
+width:900px;
+margin:0 auto 20px auto;
+}
+
+#status {
+padding:10px 10px 10px 32px;
+margin:0 auto 20px auto;
+background:#ebe7d6 url(images/bulb.png) no-repeat left center;
+border:2px solid #b6b3a5;
+width:858px;
+color:#b6b3a5;
+}
+
+.dataset {
+float : left;
+border : 1px solid grey;
+margin : 4px;
+padding : 4px;
+}
+
+.dataset ul.observation_groups {
+padding : 5px;
+height : 250px;
+overflow : auto;
+}
+
+.selected {
+background-color: grey;
+}
+
+.area_id, .dataset_id, span.uri, .pop {
+display : none;
+}
+
+#footer {
+clear : both;
+}
+
+div.dsd-details {
+position:relative;
+}
+
+div.dsd-details .load {
+position:absolute;
+right:10px;
+bottom:10px;
+}
+
+.dsd-details {
+padding:20px !important;
+}
+
+.dsd-details ul {
+list-style:inside square;
+font-size:14px;
+}
+
+.dsd-details ul li {
+font-weight:bold;
+}
+
+.dsd-details ul li em {
+font-weight:normal;
+font-family:georgia, serif;
+}
+
+.dsd-details h4 {
+font-size:20px;
+font-family:georgia;
+font-style:italic;
+border-bottom:1px solid #b6b3a5;
+margin:10px 0;
+}
+
+/* VISUALISATIONS */
+
+div#visualisation {
+background:transparent;
+height:400px;
+overflow:hidden;
+padding:0 0 0 140px;
+}
+
+div#visualisation.empty{
+background:#fff url(images/dummy_graph.gif) no-repeat center center;
+}
+
+div.dataset {
+border:0;
+}
+
+div.dataset ul {
+padding:20px !important;
+}
+
+div.dataset h3 {
+font-size:24px;
+min-height:60px;
+font-family:georgia, serif;
+font-style:italic;
+margin:0 0 10px 0;
+}
+
+div.dataset h4 {
+padding:0 0 0 30px;
+}
+
+div.dataset li {
+margin:0 0 10px 0;
+font-size:14px;
+}
+
+div.dataset li em {
+font-family:georgia, serif;
+padding:0 0 0 5px
+}
+
+h4.group_header {
+position:relative;
+height:40px;
+line-height:40px;
+}
+
+h4.selected {
+background:#336633;
+}
+
+button.group_select {
+position:absolute;
+top:0;
+right:-2px;
+height:40px;
+border:0;
+}
+
+h4.selected button.group_select {
+background:#336633 !important;
+}
+
+/* See license.txt for terms of usage */
+.firebugCanvas {
+    position:fixed;
+    top: 0;
+    left: 0;
+    display:none;
+    border: 0 none;
+    margin: 0;
+    padding: 0;
+    outline: 0;
+}
+
+.firebugCanvas:before, .firebugCanvas:after {
+    content: "";
+}
+
+.firebugHighlight {
+    z-index: 2147483646;
+    position: fixed;
+    background-color: #3875d7;
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    border: 0 none;
+}
+
+.firebugHighlight:before, .firebugHighlight:after {
+    content: "";
+}
+
+.firebugLayoutBoxParent {
+    z-index: 2147483646;
+    position: fixed;
+    background-color: transparent;
+    border-top: 0 none;
+    border-right: 1px dashed #E00 !important;
+    border-bottom: 1px dashed #E00 !important;
+    border-left: 0 none;
+    margin: 0;
+    padding: 0;
+    outline: 0;
+}
+
+.firebugRuler {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    border: 0 none;
+}
+
+.firebugRuler:before, .firebugRuler:after {
+    content: "";
+}
+
+.firebugRulerH {
+    top: -15px;
+    left: 0;
+    width: 100%;
+    height: 14px;
+    background: url("data:image/png,%89PNG%0D%0A%1A%0A%00%00%00%0DIHDR%00%00%13%88%00%00%00%0E%08%02%00%00%00L%25a%0A%00%00%00%04gAMA%00%00%D6%D8%D4OX2%00%00%00%19tEXtSoftware%00Adobe%20ImageReadyq%C9e%3C%00%00%04%F8IDATx%DA%EC%DD%D1n%E2%3A%00E%D1%80%F8%FF%EF%E2%AF2%95%D0D4%0E%C1%14%B0%8Fa-%E9%3E%CC%9C%87n%B9%81%A6W0%1C%A6i%9A%E7y%0As8%1CT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AATE9%FE%FCw%3E%9F%AF%2B%2F%BA%97%FDT%1D~K(%5C%9D%D5%EA%1B%5C%86%B5%A9%BDU%B5y%80%ED%AB*%03%FAV9%AB%E1%CEj%E7%82%EF%FB%18%BC%AEJ8%AB%FA'%D2%BEU9%D7U%ECc0%E1%A2r%5DynwVi%CFW%7F%BB%17%7Dy%EACU%CD%0E%F0%FA%3BX%FEbV%FEM%9B%2B%AD%BE%AA%E5%95v%AB%AA%E3E5%DCu%15rV9%07%B5%7F%B5w%FCm%BA%BE%AA%FBY%3D%14%F0%EE%C7%60%0EU%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5JU%88%D3%F5%1F%AE%DF%3B%1B%F2%3E%DAUCNa%F92%D02%AC%7Dm%F9%3A%D4%F2%8B6%AE*%BF%5C%C2Ym~9g5%D0Y%95%17%7C%C8c%B0%7C%18%26%9CU%CD%13i%F7%AA%90%B3Z%7D%95%B4%C7%60%E6E%B5%BC%05%B4%FBY%95U%9E%DB%FD%1C%FC%E0%9F%83%7F%BE%17%7DkjMU%E3%03%AC%7CWj%DF%83%9An%BCG%AE%F1%95%96yQ%0Dq%5Dy%00%3Et%B5'%FC6%5DS%95pV%95%01%81%FF'%07%00%00%00%00%00%00%00%00%00%F8x%C7%F0%BE%9COp%5D%C9%7C%AD%E7%E6%EBV%FB%1E%E0(%07%E5%AC%C6%3A%ABi%9C%8F%C6%0E9%AB%C0'%D2%8E%9F%F99%D0E%B5%99%14%F5%0D%CD%7F%24%C6%DEH%B8%E9rV%DFs%DB%D0%F7%00k%FE%1D%84%84%83J%B8%E3%BA%FB%EF%20%84%1C%D7%AD%B0%8E%D7U%C8Y%05%1E%D4t%EF%AD%95Q%BF8w%BF%E9%0A%BF%EB%03%00%00%00%00%00%00%00%00%00%B8vJ%8E%BB%F5%B1u%8Cx%80%E1o%5E%CA9%AB%CB%CB%8E%03%DF%1D%B7T%25%9C%D5(%EFJM8%AB%CC'%D2%B2*%A4s%E7c6%FB%3E%FA%A2%1E%80~%0E%3E%DA%10x%5D%95Uig%15u%15%ED%7C%14%B6%87%A1%3B%FCo8%A8%D8o%D3%ADO%01%EDx%83%1A~%1B%9FpP%A3%DC%C6'%9C%95gK%00%00%00%00%00%00%00%00%00%20%D9%C9%11%D0%C0%40%AF%3F%EE%EE%92%94%D6%16X%B5%BCMH%15%2F%BF%D4%A7%C87%F1%8E%F2%81%AE%AAvzr%DA2%ABV%17%7C%E63%83%E7I%DC%C6%0Bs%1B%EF6%1E%00%00%00%00%00%00%00%00%00%80cr%9CW%FF%7F%C6%01%0E%F1%CE%A5%84%B3%CA%BC%E0%CB%AA%84%CE%F9%BF)%EC%13%08WU%AE%AB%B1%AE%2BO%EC%8E%CBYe%FE%8CN%ABr%5Dy%60~%CFA%0D%F4%AE%D4%BE%C75%CA%EDVB%EA(%B7%F1%09g%E5%D9%12%00%00%00%00%00%00%00%00%00H%F6%EB%13S%E7y%5E%5E%FB%98%F0%22%D1%B2'%A7%F0%92%B1%BC%24z3%AC%7Dm%60%D5%92%B4%7CEUO%5E%F0%AA*%3BU%B9%AE%3E%A0j%94%07%A0%C7%A0%AB%FD%B5%3F%A0%F7%03T%3Dy%D7%F7%D6%D4%C0%AAU%D2%E6%DFt%3F%A8%CC%AA%F2%86%B9%D7%F5%1F%18%E6%01%F8%CC%D5%9E%F0%F3z%88%AA%90%EF%20%00%00%00%00%00%00%00%00%00%C0%A6%D3%EA%CFi%AFb%2C%7BB%0A%2B%C3%1A%D7%06V%D5%07%A8r%5D%3D%D9%A6%CAu%F5%25%CF%A2%99%97zNX%60%95%AB%5DUZ%D5%FBR%03%AB%1C%D4k%9F%3F%BB%5C%FF%81a%AE%AB'%7F%F3%EA%FE%F3z%94%AA%D8%DF%5B%01%00%00%00%00%00%00%00%00%00%8E%FB%F3%F2%B1%1B%8DWU%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*UiU%C7%BBe%E7%F3%B9%CB%AAJ%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5J%95*U%AAT%A9R%A5*%AAj%FD%C6%D4%5Eo%90%B5Z%ADV%AB%D5j%B5Z%ADV%AB%D5j%B5Z%ADV%AB%D5j%B5Z%ADV%AB%D5j%B5Z%ADV%AB%D5j%B5Z%ADV%AB%D5j%B5Z%ADV%AB%D5j%B5%86%AF%1B%9F%98%DA%EBm%BBV%AB%D5j%B5Z%ADV%AB%D5j%B5Z%ADV%AB%D5j%B5Z%ADV%AB%D5j%B5Z%ADV%AB%D5j%B5Z%ADV%AB%D5j%B5Z%ADV%AB%D5j%B5Z%AD%D6%E4%F58%01%00%00%00%00%00%00%00%00%00%00%00%00%00%40%85%7F%02%0C%008%C2%D0H%16j%8FX%00%00%00%00IEND%AEB%60%82") repeat-x;
+    border-top: 1px solid #BBBBBB;
+    border-right: 1px dashed #BBBBBB;
+    border-bottom: 1px solid #000000;
+}
+
+.firebugRulerV {
+    top: 0;
+    left: -15px;
+    width: 14px;
+    height: 100%;
+    background: url("data:image/png,%89PNG%0D%0A%1A%0A%00%00%00%0DIHDR%00%00%00%0E%00%00%13%88%08%02%00%00%00%0E%F5%CB%10%00%00%00%04gAMA%00%00%D6%D8%D4OX2%00%00%00%19tEXtSoftware%00Adobe%20ImageReadyq%C9e%3C%00%00%06~IDATx%DA%EC%DD%D1v%A20%14%40Qt%F1%FF%FF%E4%97%D9%07%3BT%19%92%DC%40(%90%EEy%9A5%CB%B6%E8%F6%9Ac%A4%CC0%84%FF%DC%9E%CF%E7%E3%F1%88%DE4%F8%5D%C7%9F%2F%BA%DD%5E%7FI%7D%F18%DDn%BA%C5%FB%DF%97%BFk%F2%10%FF%FD%B4%F2M%A7%FB%FD%FD%B3%22%07p%8F%3F%AE%E3%F4S%8A%8F%40%EEq%9D%BE8D%F0%0EY%A1Uq%B7%EA%1F%81%88V%E8X%3F%B4%CEy%B7h%D1%A2E%EBohU%FC%D9%AF2fO%8BBeD%BE%F7X%0C%97%A4%D6b7%2Ck%A5%12%E3%9B%60v%B7r%C7%1AI%8C%BD%2B%23r%00c0%B2v%9B%AD%CA%26%0C%1Ek%05A%FD%93%D0%2B%A1u%8B%16-%95q%5Ce%DCSO%8E%E4M%23%8B%F7%C2%FE%40%BB%BD%8C%FC%8A%B5V%EBu%40%F9%3B%A72%FA%AE%8C%D4%01%CC%B5%DA%13%9CB%AB%E2I%18%24%B0n%A9%0CZ*Ce%9C%A22%8E%D8NJ%1E%EB%FF%8F%AE%CAP%19*%C3%BAEKe%AC%D1%AAX%8C*%DEH%8F%C5W%A1e%AD%D4%B7%5C%5B%19%C5%DB%0D%EF%9F%19%1D%7B%5E%86%BD%0C%95%A12%AC%5B*%83%96%CAP%19%F62T%86%CAP%19*%83%96%CA%B8Xe%BC%FE)T%19%A1%17xg%7F%DA%CBP%19*%C3%BA%A52T%86%CAP%19%F62T%86%CA%B0n%A9%0CZ%1DV%C6%3D%F3%FCH%DE%B4%B8~%7F%5CZc%F1%D6%1F%AF%84%F9%0F6%E6%EBVt9%0E~%BEr%AF%23%B0%97%A12T%86%CAP%19%B4T%86%CA%B8Re%D8%CBP%19*%C3%BA%A52huX%19%AE%CA%E5%BC%0C%7B%19*CeX%B7h%A9%0C%95%E1%BC%0C%7B%19*CeX%B7T%06%AD%CB%5E%95%2B%BF.%8F%C5%97%D5%E4%7B%EE%82%D6%FB%CF-%9C%FD%B9%CF%3By%7B%19%F62T%86%CA%B0n%D1R%19*%A3%D3%CA%B0%97%A12T%86uKe%D0%EA%B02*%3F1%99%5DB%2B%A4%B5%F8%3A%7C%BA%2B%8Co%7D%5C%EDe%A8%0C%95a%DDR%19%B4T%C66%82fA%B2%ED%DA%9FC%FC%17GZ%06%C9%E1%B3%E5%2C%1A%9FoiB%EB%96%CA%A0%D5qe4%7B%7D%FD%85%F7%5B%ED_%E0s%07%F0k%951%ECr%0D%B5C%D7-g%D1%A8%0C%EB%96%CA%A0%A52T%C6)*%C3%5E%86%CAP%19%D6-%95A%EB*%95q%F8%BB%E3%F9%AB%F6%E21%ACZ%B7%22%B7%9B%3F%02%85%CB%A2%5B%B7%BA%5E%B7%9C%97%E1%BC%0C%EB%16-%95%A12z%AC%0C%BFc%A22T%86uKe%D0%EA%B02V%DD%AD%8A%2B%8CWhe%5E%AF%CF%F5%3B%26%CE%CBh%5C%19%CE%CB%B0%F3%A4%095%A1%CAP%19*Ce%A8%0C%3BO*Ce%A8%0C%95%A12%3A%AD%8C%0A%82%7B%F0v%1F%2FD%A9%5B%9F%EE%EA%26%AF%03%CA%DF9%7B%19*Ce%A8%0C%95%A12T%86%CA%B8Ze%D8%CBP%19*Ce%A8%0C%95%D1ae%EC%F7%89I%E1%B4%D7M%D7P%8BjU%5C%BB%3E%F2%20%D8%CBP%19*Ce%A8%0C%95%A12T%C6%D5*%C3%5E%86%CAP%19*Ce%B4O%07%7B%F0W%7Bw%1C%7C%1A%8C%B3%3B%D1%EE%AA%5C%D6-%EBV%83%80%5E%D0%CA%10%5CU%2BD%E07YU%86%CAP%19*%E3%9A%95%91%D9%A0%C8%AD%5B%EDv%9E%82%FFKOee%E4%8FUe%A8%0C%95%A12T%C6%1F%A9%8C%C8%3D%5B%A5%15%FD%14%22r%E7B%9F%17l%F8%BF%ED%EAf%2B%7F%CF%ECe%D8%CBP%19*Ce%A8%0C%95%E1%93~%7B%19%F62T%86%CAP%19*Ce%A8%0C%E7%13%DA%CBP%19*Ce%A8%0CZf%8B%16-Z%B4h%D1R%19f%8B%16-Z%B4h%D1R%19%B4%CC%16-Z%B4h%D1R%19%B4%CC%16-Z%B4h%D1%A2%A52%CC%16-Z%B4h%D1%A2%A52h%99-Z%B4h%D1%A2%A52h%99-Z%B4h%D1%A2EKe%98-Z%B4h%D1%A2EKe%D02%5B%B4h%D1%A2EKe%D02%5B%B4h%D1%A2E%8B%96%CA0%5B%B4h%D1%A2E%8B%96%CA%A0e%B6h%D1%A2E%8B%96%CA%A0e%B6h%D1%A2E%8B%16-%95a%B6h%D1%A2E%8B%16-%95A%CBl%D1%A2E%8B%16-%95A%CBl%D1%A2E%8B%16-Z*%C3l%D1%A2E%8B%16-Z*%83%96%D9%A2E%8B%16-Z*%83%96%D9%A2E%8B%16-Z%B4T%86%D9%A2E%8B%16-Z%B4T%06-%B3E%8B%16-Z%B4T%06-%B3E%8B%16-Z%B4h%A9%0C%B3E%8B%16-Z%B4h%A9%0CZf%8B%16-Z%B4h%A9%0CZf%8B%16-Z%B4h%D1R%19f%8B%16-Z%B4h%D1R%19%B4%CC%16-Z%B4h%D1R%19%B4%CC%16-Z%B4h%D1%A2%A52%CC%16-Z%B4h%D1%A2%A52h%99-Z%B4h%D1%A2%A52h%99-Z%B4h%D1%A2EKe%98-Z%B4h%D1%A2EKe%D02%5B%B4h%D1%A2EKe%D02%5B%B4h%D1%A2E%8B%96%CA0%5B%B4h%D1%A2E%8B%96%CA%A0e%B6h%D1%A2E%8B%96%CA%A0e%B6h%D1%A2E%8B%16-%95a%B6h%D1%A2E%8B%16-%95A%CBl%D1%A2E%8B%16-%95A%CBl%D1%A2E%8B%16-Z*%C3l%D1%A2E%8B%16-Z*%83%96%D9%A2E%8B%16-Z*%83%96%D9%A2E%8B%16-Z%B4T%86%D9%A2E%8B%16-Z%B4T%06-%B3E%8B%16-Z%B4T%06-%B3E%8B%16-Z%B4h%A9%0C%B3E%8B%16-Z%B4h%A9%0CZf%8B%16-Z%B4h%A9%0CZf%8B%16-Z%B4h%D1R%19f%8B%16-Z%B4h%D1R%19%B4%CC%16-Z%B4h%D1R%19%B4%CC%16-Z%B4h%D1%A2%A52%CC%16-Z%B4h%D1%A2%A52h%99-Z%B4h%D1%A2%A52h%99-Z%B4h%D1%A2EKe%98-Z%B4h%D1%A2EKe%D02%5B%B4h%D1%A2EKe%D02%5B%B4h%D1%A2E%8B%96%CA0%5B%B4h%D1%A2E%8B%96%CA%A0e%B6h%D1%A2E%8B%96%CA%A0e%B6h%D1%A2E%8B%16-%95a%B6h%D1%A2E%8B%16-%95A%CBl%D1%A2E%8B%16-%95A%CBl%D1%A2E%8B%16-Z*%C3l%D1%A2E%8B%16-Z*%83%96%D9%A2E%8B%16-Z*%83%96%D9%A2E%8B%16-Z%B4T%86%D9%A2E%8B%16-Z%B4T%06-%B3E%8B%16-Z%B4%AE%A4%F5%25%C0%00%DE%BF%5C'%0F%DA%B8q%00%00%00%00IEND%AEB%60%82") repeat-y;
+    border-left: 1px solid #BBBBBB;
+    border-right: 1px solid #000000;
+    border-bottom: 1px dashed #BBBBBB;
+}
+
+.overflowRulerX > .firebugRulerV {
+    left: 0;
+}
+
+.overflowRulerY > .firebugRulerH {
+    top: 0;
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+.firebugLayoutBox {
+    margin: 0;
+    padding: 0;
+    border: 0 none;
+    outline: 0;
+}
+
+.firebugLayoutBox:before, .firebugLayoutBox:after {
+    content: "";
+}
+
+.firebugLayoutBoxOffset {
+    z-index: 2147483646;
+    position: fixed;
+    opacity: 0.8;
+}
+
+.firebugLayoutBoxMargin {
+    background-color: #EDFF64;
+}
+
+.firebugLayoutBoxBorder {
+    background-color: #666666;
+}
+
+.firebugLayoutBoxPadding {
+    background-color: SlateBlue;
+}
+
+.firebugLayoutBoxContent {
+    background-color: SkyBlue;
+}
+
+.firebugLayoutLine {
+    z-index: 2147483646;
+    background-color: #000000;
+    opacity: 0.4;
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    border: 0 none;
+}
+
+.firebugLayoutLine:before, .firebugLayoutLine:after {
+    content: "";
+}
+
+.firebugLayoutLineLeft, .firebugLayoutLineRight {
+    position: fixed;
+    width: 1px;
+    height: 100%;
+}
+
+.firebugLayoutLineTop, .firebugLayoutLineBottom {
+    position: fixed;
+    width: 100%;
+    height: 1px;
+}
+
+.firebugLayoutLineTop {
+    margin-top: -1px;
+    border-top: 1px solid #999999;
+}
+
+.firebugLayoutLineRight {
+    border-right: 1px solid #999999;
+}
+
+.firebugLayoutLineBottom {
+    border-bottom: 1px solid #999999;
+}
+
+.firebugLayoutLineLeft {
+    margin-left: -1px;
+    border-left: 1px solid #999999;
+}
+
+.fbProxyElement {
+    position: absolute;
+    background-color: transparent;
+    z-index: 2147483646;
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    border: 0 none;
+}
+
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>
+
+<script type="text/javascript" src="./js/jquery.tmpl.js"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+  // Load the Visualization API and the piechart package.
+  google.load('visualization', '1', {'packages':['corechart']});
+</script>
+
+<script type="text/javascript">
+    //Group observations by:
+	var ol_group_by = 'drefArea';
+	// Location of proxy
+	var endpoint = './endpoint.php';
+	// Max simultaneously selected observation groups
+	var max_selected_groups = 8;
+	
+    var dsds = {};
+    var selected_groups = [];
+</script>
+
+<script id="comparisonsTemplate" type="text/x-jquery-tmpl"> 
+	    <div  id="dsds" class="accordion">
+		{{each(dsd, obj) $item.data}}
+		  	<h3>
+		  		<a href="#" class="dsd-toggle">
+		  			{{if obj.label}}
+					   ${obj.label}
+					 {{else}}
+					   ${obj.dsd_uri}
+					 {{/if}}
+			       <span class="uri">${obj.dsd_uri}</span></a>
+			</h3>		
+			<div class="dsd-details">
+				{{if obj.comment}}
+				    <p>${obj.comment}</p>
+				{{/if}}
+				<h4>Datasets:</h4>
+	            <ul class="datasets">
+	                {{each obj.datasets}}
+	                    <li>
+	                        ${getLabel($value, 'dataset')}
+	                    </li>
+	                {{/each}}
+	            </ul>
+				<h4>Comparable Data Elements</h4>
+				<ul class="dsd-elements">
+					<img src="./images/loading.gif" />
+				</ul>
+				{{tmpl(obj) '#loadDataButtonTemplate'}} 
+			</div>
+		{{/each}}
+	    </div>
+</script>
+
+<script id="dsdElementsTemplate" type="text/x-jquery-tmpl">
+	{{each $item.data.structure}}
+		<li>
+			{{if $value.label}}
+				${$value.label.value}
+			{{else}}
+				${lastURIElement($value.variable.value)}
+			{{/if}}
+			&nbsp;<em>(${lastURIElement($value.type.value)})</em>
+		</li>
+	{{/each}}
+</script>
+
+<script id="loadDataButtonTemplate" type="text/x-jquery-tmpl">
+	<a class="load" href="#" style="display:none;" value="${$item.data.dsd_uri}">Load Data</a>
+</script>
+
+<script id="comparisonViewTemplate" type="text/x-jquery-tmpl">
+	<div id="visualisation" class="empty"></div>
+	{{each $item.data.datasets}}
+	<div class="dataset" style="width:${calcCols($item.data.datasets.length)}px">	
+		<h3>${getLabel($value, 'dataset')}</h3>
+		<div class="observation_groups accordion">
+			{{each(i, ob_group) groupOn(yankItems($item.data.observations, 'dataset', $value.dataset.value), ol_group_by)}}
+			
+				<h4 class="group_header">
+					${getLabel(ob_group[0], ol_group_by)}&nbsp;
+					${ob_group.length} observations
+					{{tmpl({'observations':ob_group}) '#selectObservationGroupButtonTemplate'}}
+				</h4>
+				<ul class="group_body">
+					{{each(ob_counter, ob) ob_group}}
+						<li>
+							{{each(prop, val) ob}}
+								<strong>${prop}</strong>:<em>${lastURIElement(val.value)}</em><br/>
+							{{/each}}
+						</li>
+					{{/each}}
+				</ul>
+			
+			{{/each}}
+		</div>
+	</div>
+	{{/each}}
+</script>
+
+<script id="selectObservationGroupButtonTemplate" type="text/x-jquery-tmpl">
+	<button class="group_select" value="${$item.data}" title="Add to comparison">add</button>
+</script>
+
+<script type="text/javascript">
+	
+	/**
+	 * Parse out the rightmost element from a URI
+	 * Understands paths and fragments
+	 * 
+	 * @param {Object} uri
+	 */
+	function lastURIElement(uri) {
+		var lpe = uri.split('/').pop();
+		return lpe.split('#').pop();
+	}
+	
+	/**
+	 * Try to extract the best possible label from a result object
+	 * @param {Object} obj
+	 * @param {Object} key
+	 */
+	function getLabel(obj, key) {
+		if (obj.hasOwnProperty(key + 'label')) {
+			return obj[key + 'label'].value;
+		} else {
+			if (obj.hasOwnProperty(key)) {
+				return lastURIElement(obj[key].value);
+			} else {
+				return 'Unknown';
+			}
+		}
+	}
+	
+	/**
+	 * Calculate a width for a column.
+	 * Surely there's a better way... a table?
+	 * @param {Object} cols
+	 */
+	function calcCols(cols) {
+		var c_width = $('#content').width();
+		return Math.floor((c_width - (20 * cols))/cols);
+	}
+	
+	/**
+	 * Return a comparator function to sort objects by the supplied property
+	 * NB descends to the 'value' key of the named property
+	 * 
+	 * @param {Object} prop_name
+	 */
+	function cmpFactory(prop_name) {
+		var prop = prop_name;
+		return function(a, b) {
+			return b[prop].value - a[prop].value;
+		};
+	}
+	
+	/**
+	 * Find the appropriate measure fot the datastucture
+	 * 
+	 * @param {Object} dsd_obj
+	 */
+	function getMeasure(dsd_obj) {
+		var measures = [];
+		$.each(dsd_obj.structure, function(i,v){
+			if (lastURIElement(v.type.value) === 'measure') {
+				v.ob_key = 'm' + lastURIElement(v.variable.value);
+				if (v.label) {
+					v.title = v.label.value;
+				} else {
+					v.title = lastURIElement(v.variable.value);
+				}
+				measures.push(v);
+			}
+		});
+		
+		var measure = measures.pop();
+		if (measures.length > 1) {
+			alert('Multiple measures found in dataset. "' + measure.title + '" has been chosen to draw this comparision');
+		} 
+		return measure;
+		
+	}
+	
+	/**
+	 * Returns an array which is a subset of arr where all items have 
+	 * the property prop and its value contains a value key whose value is
+	 * val... go figure...
+	 * @param {Object} arr
+	 * @param {Object} prop
+	 * @param {Object} val
+	 */
+	function yankItems(arr, prop, val) {
+		var filter = function (p, v) {
+			var prop = p;
+			var val = v;
+			return function(i,v){
+				if (v[prop]) {
+					if (v[prop].value == val) {
+						return true;
+					}
+				}
+				return false;
+			};
+		};
+		var filtered = [];
+		var ff = filter(prop, val);
+		$.each(arr, function(i,v){
+			if (ff(i, v)) {
+				filtered.push(v);
+			}
+		});
+		return filtered;
+	}
+	
+	/**
+	 * Takes an array of objects and returns an object
+	 * grouping the originals under keys representing the values of the property
+	 * specified
+	 * @param {Object} arr
+	 * @param {Object} key
+	 */
+	function groupOn(arr, key) {
+		var grouped = {};
+		$.each(arr, function(i,v){
+			if (!grouped.hasOwnProperty(v[key].value)) {
+				grouped[v[key].value] = [];
+			}
+			grouped[v[key].value].push(v);
+		});
+		return grouped;
+	}
+	
+	/**
+	 * Select a group of observations and
+	 * redraw the comparison
+	 * 
+	 * If the group is already in the selection it'll be removed
+	 * 
+	 * The number of selected groups is capped by
+	 * the global max_selected_groups
+	 * 
+	 * returns true if the group ends up selected false if not
+	 * 
+	 * @param {Object} area
+	 */
+	function toggleGroupSelection(group) {
+		var pos = $.inArray(group, selected_groups);
+		var old_selection = selected_groups.slice(0);
+		switch (pos) {
+			case -1:
+				selected_groups.push(group);
+				break;
+			default:
+				selected_groups.splice(pos, 1);
+				break;
+		}
+		selected_groups = selected_groups.slice(-max_selected_groups);
+		
+		$.each(old_selection.concat(selected_groups), function(i, v){
+			var state = $.inArray(v, selected_groups) !== -1;
+			$.each(v.nodes, function(i, node){
+				updateSelectionUI(node, state);
+			});
+		});
+        
+		// Remove the hint once we've got one
+		if (selected_groups.length === 0) {
+			$('#status').slideDown();
+			$('#visualisation').addClass('empty');
+		} else {
+			$('#status').slideUp();
+			$('#visualisation').removeClass('empty');
+		}
+		
+        drawComparison();
+      }
+	  
+	  /**
+	   * Draw a google column visualisation using the current contents
+	   * of the selected_groups array
+	   */
+	  function drawComparison() {
+	  	// Utility to make a label continaing age range and sex
+        var dimension_key = function (obj) {
+            return getLabel(obj, 'drefAge') + ' ' + getLabel(obj, 'dsex');
+        };
+		var data = new google.visualization.DataTable();
+		data.addColumn('string', 'Age Range');
+		var measure = {};
+        
+		if (selected_groups.length > 0) {
+			//Find the measure by which to compare
+	        // Ask the user if we're not sure
+	        var measure = getMeasure(selected_groups[0].parent.data);
+	        
+	        // Loop over the data
+	        var stats = {cols:[], dimension:{}};
+	        $.each(selected_groups, function(i,v){
+	            stats.cols.push(getLabel(v.data.observations[0], ol_group_by));
+	            $.each(v.data.observations, function(i,v){
+	                if (!stats.dimension.hasOwnProperty(dimension_key(v))) {
+	                    stats.dimension[dimension_key(v)] = {};
+	                }
+	                stats.dimension[dimension_key(v)][getLabel(v, ol_group_by)] = parseFloat(v[measure.ob_key].value);
+	            });
+	        });
+	        
+	        $.each(stats.cols, function(i, v) {
+	            data.addColumn('number', v);
+	        });
+	        
+	        var index = 0;
+	        $.each(stats.dimension, function(key, val){
+	            data.addRows(1);
+	            data.setValue(index, 0, key);
+	            $.each(stats.cols, function(i,v){
+	                data.setValue(index, i+1, val[v]);
+	            });
+	            index++;
+	            
+	        });
+			
+			var chart = new google.visualization.ColumnChart(document.getElementById('visualisation'));
+            chart.draw(data, {width: 600, height: 400, title: measure.title,
+                           hAxis: {title: 'Age Range', titleTextStyle: {color: 'red'}}
+            });
+		} else {
+			$('#visualisation').empty();
+		}
+	 }
+	  
+	  /**
+	   * Handle any UI state changes when a group is selected or deselected
+	   * 
+	   * @param {Object} button
+	   * @param {Object} selected
+	   */
+	  function updateSelectionUI(elem, selected){
+	  	var elem = $(elem);
+	  	if (selected) {
+			elem.button( "option", "label", "remove" );
+			elem.button('option', 'icons', {primary:'ui-icon-circle-minus'});
+			elem.parents('.group_header:first').addClass('selected');
+		} else {
+			elem.button( "option", "label", "add" );
+			elem.button('option', 'icons', {primary:'ui-icon-circle-plus'});
+			elem.parents('.group_header:first').removeClass('selected');
+		}
+	  }
+	  
+	  /**
+	   * Run a suite of jqueryUI enhancements against an element and its contents
+	   * @param {Object}elem
+	   */
+	  function enhanceUI(elem) {
+	  	 // Buttonize
+		 $('.load', elem).button();
+		 $('button.group_select').button({icons:{primary:'ui-icon-circle-plus'},
+		                                                      text:true});
+		 $('.accordion').accordion({
+		 	collapsible : true,
+			active : false,
+			clearStyle : true
+		 });
+		  
+		 $('#nav a.pop_toggle', elem).each(function(){
+		 	$(this).data('pop', $(this).next('.pop'));
+			$(this).bind('click', function(){
+				$($(this).data('pop')).dialog();
+			});
+		 });
+	  }
+	
+	/**
+	 * Encode a sparql query for use against our endpoint proxy 
+	 * 
+	 * @param {Object} query
+	 */
+    function build_sparql_params(query, use_default_graph) {
+		
+		var prefixes = ['prefix qb: <http://purl.org/linked-data/cube#>',
+		                          'prefix yl: <http://data.younglives.org.uk/variables/>',
+								  'prefix yls: <http://data.younglives.org.uk/statistics/>',
+								  'prefix sdmx-dimension: <http://purl.org/linked-data/sdmx/2009/dimension#>',
+								  'prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>',
+								  'prefix skos: <http://www.w3.org/2004/02/skos/core#>'];
+		
+		query = prefixes.join(' ') + ' ' + query; 
+		var format = 'application/sparql-results+json';
+        var graphURI = 'http://data.younglives.org.uk/';
+        var url = 'http://practicalparticipation.dyndns.org:8890/sparql?';
+        if (use_default_graph) {
+			url += 'default-graph-uri=' + encodeURIComponent(graphURI);
+		} else {
+			url += 'default-graph-uri='
+			url += '&should-sponge=grab-all-seealso';
+		} 
+        url += '&format=' + encodeURIComponent(format);
+        url += '&query=' + encodeURIComponent(query);
+
+        var params = {'mode':'native',
+                      'url':url};						  
+		return params;
+	}
+	
+	/**
+	 * Display a list of DSDs and the datasets which use them
+	 */
+	function getDSDs() {
+            // Listing the dsds and datasets
+            var query = 'SELECT ?dsd ?dsdlabel ?dsdcomment ?dataset ?datasetlabel ?datasetcomment WHERE {';
+            query += '?dsd a qb:DataStructureDefinition .';
+            query += '?dataset qb:structure ?dsd.';
+			query += 'OPTIONAL {?dsd rdfs:label ?dsdlabel.}';
+			query += 'OPTIONAL {?dsd rdfs:comment ?dsdcomment.}';
+            query += 'OPTIONAL {?dataset rdfs:label ?datasetlabel.}';
+			query += 'OPTIONAL {?dataset rdfs:comment ?datasetcomment.}';
+            query += '} ';
+                              
+            $.getJSON(endpoint, build_sparql_params(query, true), 
+                 function(data){
+                     //Wrangle the data cos virtuoso won't GROUP BY
+                     dsds = {};
+                     $.each(data.results.bindings, function(i,v){
+                        if (!dsds.hasOwnProperty(v.dsd.value)) {
+                            dsds[v.dsd.value] = {'structure':[], 
+												 'datasets':[], 
+												 'dsd_uri':v.dsd.value,
+												 'observations':[]};
+							if (v.dsdlabel) {
+								dsds[v.dsd.value].label = v.dsdlabel.value;
+							}
+							if (v.dsdcomment) {
+                                dsds[v.dsd.value].comment = v.dsdcomment.value;
+                            }
+                        }
+						
+						// Have we got this dataset already?
+						var ds_added = false;
+						$.each(dsds[v.dsd.value].datasets, function(dex, res) {
+							if (v.dataset.value == res.dataset.value) {
+								ds_added = true;
+							}
+						});
+						if (!ds_added) {
+							dsds[v.dsd.value].datasets.push(v);
+						}
+                        
+                     });
+					 
+					 //Set up bindings for the dsds
+					 $('#dsds.accordion').live('accordionchange', function(event, ui){
+					 	if (ui.newHeader.length !== 0) {
+							var dsd_uri = $('span.uri', ui.newHeader).text();
+                            if (dsds[dsd_uri].structure.length === 0) {
+                                loadDSD(dsd_uri, $('.dsd-elements', ui.newContent));
+                            }
+						}
+					 });
+                     
+                     // Build the content
+					 $('#subtitle').text('Available Datacubes');
+                     $('#content').html($('#comparisonsTemplate').tmpl(dsds));     
+					 
+					 // Add jqueryUI elements
+					 enhanceUI($('#content'));
+              }
+            );
+        }
+		
+		/**
+		 * Load and display a dsd
+		 * 
+		 * @param {Object} dsd
+		 * @param {Object} output
+		 */
+		function loadDSD(dsd, output) {
+            // Listing the dsds and datasets
+            var query = 'SELECT ?variable ?label ?type WHERE {';
+            query += '<' + dsd + '> qb:component ?component.';
+            query += '?component ?type ?variable.';
+			query += 'FILTER(?type !=qb:order)';
+			query += 'OPTIONAL {?variable rdfs:label ?label.}';
+            query += 'OPTIONAL {?component qb:order ?order.}';
+            query += '} ';
+            
+			// Setup a binding for 'Load Data' buttons
+			$('.load').live('click', function(){
+				loadObservations($(this).tmplItem());
+				return false;
+			});
+			                  
+            $.getJSON(endpoint, build_sparql_params(query, true), 
+                 function(data){
+					dsds[dsd].structure = data.results.bindings;
+				    output.html($('#dsdElementsTemplate').tmpl(dsds[dsd]));    
+					//Reveal the relevant load button
+				
+					//$('button.load[value='+dsd+']').show();
+					
+					// THE ABOVE ATTR SELECTOR DOESN'T WORK IN IE7-. Something like below needed
+					$.each($('.load'), function(i,v) {
+						v = $(v);
+						if (v.attr('value') === dsd) {
+							v.show();
+						}
+					});
+					
+					//$('<button class="load"></button>').attr('value', dsd).insertAfter(?);
+				 }
+		     );
+		}
+		
+		/**
+		 * Load observations conforming to the dsd provided
+		 * Categorise them by data set and draw the comparison interface
+		 * 
+		 * @param {Object} dsd_obj
+		 */
+		function loadObservations(dsd_obj){		
+			var select = 'SELECT ?dataset ';
+			var where = 'WHERE { ?obs a qb:Observation .';
+			where += '?obs qb:dataSet ?dataset .';
+			
+			$.each(dsd_obj.data.structure, function(i, v){
+				var var_name = lastURIElement(v.variable.value);
+				switch (lastURIElement(v.type.value)) {
+					case 'dimension':
+						select += ' ?d' + var_name + ' ?d'+ var_name +'label ';
+						where += '?obs <'+ v.variable.value +'> ?d' + var_name + '. ';
+						where += 'OPTIONAL { ?d'+ var_name +' rdfs:label ?d'+ var_name +'label. } ';
+						where += 'OPTIONAL { ?d'+ var_name +' skos:prefLabel ?d'+ var_name +'label. } ';
+						break;
+					case 'measure':
+						select += ' ?m' + var_name;
+						where += '?obs <' + v.variable.value + '> ?m' + var_name + '. ';
+						break;
+				}
+			});
+			
+			where += ' }';
+			
+			var query = select + ' ' + where;
+			
+			$.getJSON(endpoint, build_sparql_params(query, true),
+				function(data){
+					// Bindings
+					$('.group_select').live('click', function(event){
+						toggleGroupSelection($(this).tmplItem());
+						//prevent this click from opening the containing accordion
+                       
+                        event.stopImmediatePropagation();
+						event.preventDefault();	
+					});
+					
+					$.each(data.results.bindings, function (i, v){
+						dsds[dsd_obj.data.dsd_uri].observations.push(v);
+					});
+					$('h2#title').text('Comparing the data');
+					$('#subtitle').text('Choose up to ' + max_selected_groups + ' areas to compare');
+					$('div#status').show();
+					var content = $('#comparisonViewTemplate').tmpl(dsds[dsd_obj.data.dsd_uri]);
+					$('#content').html(content);
+					enhanceUI($('#content'));
+					$('.group_select').click(function(event){
+                        toggleGroupSelection($(this).tmplItem());
+                        //prevent this click from opening the containing accordion
+                        event.stopImmediatePropagation();
+                        event.preventDefault();     
+                    });
+				});
+		}
+		
+		
+	
+	
+	$(document).ready(function() {
+		enhanceUI(document);
+        //Show a list of DSDs to choose from
+		getDSDs();
+	});
+	
+</script>
+</head>
+<body>
+	<div id="wrapper">
+		<div id="header">
+				<div id="header-inner">
+					<h1><img src="images/logo.gif"><span>Young Lives Comparator, a data comparison tool</span></h1>
+				</div>
+		</div>
+		<div id="nav">
+			<div id="nav-inner">
+				<ul>
+					<li>
+						<a class="pop_toggle" href="#">Tim Read This</a>
+						<div class="pop" title="Adding Popups">		
+                                <p>Just replicate the structure in this 'li' to add additional nav links which trigger popups.</p>
+								<p>Other links can, of course, go elsewhere...</p>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="title-and-lorem">
+			<h2 id="title">Available Datacubes</h2>
+			<p>Pellentesque auctor dui vel nisi lacinia quis dapibus tortor pulvinar. Vivamus condimentum ultrices posuere. Phasellus ac gravida magna. Suspendisse potenti. Phasellus in ultricies dui. Vivamus dignissim mattis eleifend. Mauris leo orci, ornare sollicitudin sollicitudin vel, pellentesque sed leo.</p>
+		</div>
+		<div id="status">
+			<h2 id="subtitle"></h2>
+		</div>
+		<div id="content">
+		</div>
+		<div id="footer">
+		</div>
+	</div>
+</body>
+</html>
