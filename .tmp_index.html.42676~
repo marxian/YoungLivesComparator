@@ -846,18 +846,7 @@ background:#336633 !important;
                                 dsds[v.dsd.value].comment = v.dsdcomment.value;
                             }
                         }
-						
-						// Have we got this dataset already?
-						var ds_added = false;
-						$.each(dsds[v.dsd.value].datasets, function(dex, res) {
-							if (v.dataset.value == res.dataset.value) {
-								ds_added = true;
-							}
-						});
-						if (!ds_added) {
-							dsds[v.dsd.value].datasets.push(v);
-						}
-                        
+                        dsds[v.dsd.value].datasets.push(v);
                      });
 					 
 					 //Set up bindings for the dsds
