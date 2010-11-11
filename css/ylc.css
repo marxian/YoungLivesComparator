@@ -221,3 +221,8 @@ border:0;
 h4.selected button.group_select {
 background:#336633 !important;
 }
+
+.loader {
+	text-align : center;
+	margin : auto;
+}
