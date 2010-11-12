@@ -293,21 +293,21 @@ function build_sparql_params(query, use_default_graph) {
 					  'prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>',
 					  'prefix skos: <http://www.w3.org/2004/02/skos/core#>'];
 
-query = prefixes.join(' ') + ' ' + query; 
-var format = 'application/sparql-results+json';
-var graphURI = 'http://data.younglives.org.uk/';
-var url = 'http://practicalparticipation.dyndns.org:8890/sparql?';
-if (use_default_graph) {
-	url += 'default-graph-uri=' + encodeURIComponent(graphURI);
-} else {
-	url += 'default-graph-uri='
-url += '&should-sponge=grab-all-seealso';
-} 
-url += '&format=' + encodeURIComponent(format);
-url += '&query=' + encodeURIComponent(query);
-
-var params = {'mode':'native',
-          'url':url};						  
+	query = prefixes.join(' ') + ' ' + query; 
+	var format = 'application/sparql-results+json';
+	var graphURI = 'http://data.younglives.org.uk/';
+	var url = 'http://practicalparticipation.dyndns.org:8890/sparql?';
+	if (use_default_graph) {
+		url += 'default-graph-uri=' + encodeURIComponent(graphURI);
+	} else {
+		url += 'default-graph-uri='
+	url += '&should-sponge=grab-all-seealso';
+	} 
+	url += '&format=' + encodeURIComponent(format);
+	url += '&query=' + encodeURIComponent(query);
+	
+	var params = {'mode':'native',
+	          'url':url};						  
 	return params;
 }
 
@@ -399,6 +399,8 @@ function loadDSD(dsd, output) {
 	
 	// Setup a binding for 'Load Data' buttons
 	$('.load').live('click', function(){
+		$(this).css({'padding' : '0 0 0 0'}); //'<img src="./images/tiny-loader.gif />'
+		$('.ui-button-text', this).append('<span class="loading_icon"></span>');
 		loadObservations($(this).tmplItem());
 		return false;
 	});
@@ -495,7 +497,7 @@ function handle_permalinks() {
 	var perma = jQuery.deparam.fragment();	
 	if (perma.active_dsd) {
 		// Show a loading modal
-		var loader = $('<div class="loader" title="Loading Saved State"><img src="./images/loading.gif" /></div>').dialog({modal:true,  hide: {effect: "fadeOut", duration: 1000}});
+		var loader = $('<div class="loader" title="Loading Saved State"><img src="./images/loading.gif" /><br/><em id="perma_status">Retrieving Datacube Structure</em></div>').dialog({modal:true,  hide: {effect: "fadeOut", duration: 1000}});
 		dispatcher.bind('permalink_load_chain_complete', function(){ loader.dialog('close'); });
 
 		//Set up our loading chain
@@ -506,6 +508,7 @@ function handle_permalinks() {
 					// Be ready to select items for comparison if needed
 					dispatcher.bind('observations_loaded_event', function(){
 						if (perma.select_groups) {
+							$('#perma_status').text('Drawing Comparisions');
 							// Reverse the array so that we can easily build one in the same order
 							// without upsetting IE by use of unshift()
 							perma.select_groups.reverse();
@@ -532,7 +535,8 @@ function handle_permalinks() {
 							dispatcher.trigger('permalink_load_chain_complete');
 						}
 					});
-
+					
+					$('#perma_status').text('Fetching Observations');
 					// fake up a templateItem
 					var dsd_obj = {'data':dsds[perma.active_dsd]}
 					loadObservations(dsd_obj);
