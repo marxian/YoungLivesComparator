@@ -68,7 +68,7 @@ text-align:right;
 }
 
 #nav-inner ul>li {
-	display:inline-block;
+	display:inline;
 }
 
 #nav-inner ul li a {

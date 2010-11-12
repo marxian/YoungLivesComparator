@@ -488,6 +488,7 @@ function loadObservations(dsd_obj){
 /**
  * Detect permalink fragments in the url and automate to suit
  * Sorry about this implementation - don't read it if you don't have to
+ * This javascript kills kittens
  * @return
  */
 function handle_permalinks() {
