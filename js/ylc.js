@@ -433,7 +433,7 @@ function loadDSD(dsd, output) {
  * @param {Object} dsd_obj
  */
 function loadObservations(dsd_obj){		
-	var select = 'SELECT ?dataset ';
+	var select = 'SELECT DISTINCT ?dataset ';
 	var where = 'WHERE { ?obs a qb:Observation .';
 	where += '?obs qb:dataSet ?dataset .';
 	
@@ -457,7 +457,7 @@ function loadObservations(dsd_obj){
 
 	var query = select + ' ' + where;
 	
-	$.getJSON(endpoint, build_sparql_params(query, true),
+	$.getJSON(endpoint, build_sparql_params(query, false),
 		function(data){
 
 			

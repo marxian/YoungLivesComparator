@@ -67,6 +67,10 @@ list-style:none;
 text-align:right;
 }
 
+#nav-inner ul>li {
+	display:inline-block;
+}
+
 #nav-inner ul li a {
 color:#222;
 text-decoration:none;
