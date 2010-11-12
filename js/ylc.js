@@ -460,13 +460,6 @@ function loadObservations(dsd_obj){
 	$.getJSON(endpoint, build_sparql_params(query, true),
 		function(data){
 
-			//$('.group_select').live('click', function(event){
-			//	toggleGroupSelection($(this).tmplItem());
-			//	//prevent this click from opening the containing accordion
-	        //   
-	        //    event.stopImmediatePropagation();
-			//	event.preventDefault();	
-			//});
 			
 			$.each(data.results.bindings, function (i, v){
 				dsds[dsd_obj.data.dsd_uri].observations.push(v);
