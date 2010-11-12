@@ -35,19 +35,16 @@
 			<h2 id="subtitle"></h2>
 		</div>
 		<div id="content">
-			<div class="loader">
-				<img src="./images/loading.gif" />
-				<br />
-				<em>Retrieving Datacubes</em>
-			</div>
+			
 		</div>
 		<div id="footer">
 		</div>
 	</div>
 
 <!-- Script Loads -->	
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.6/jquery-ui.min.js"></script>
+<script type="text/javascript" src="./js/jquery.ba-bbq.min.js"></script>
 <script type="text/javascript" src="./js/jquery.tmpl.js"></script>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript" src="./js/ylc.js"></script>
@@ -67,8 +64,7 @@
 	
 	$(document).ready(function() {
 		enhanceUI(document);
-        //Show a list of DSDs to choose from
-		getDSDs();
+		handle_permalinks();
 	});
 </script>
 <!-- Templates for use by jquery.tmpl -->
@@ -126,13 +122,13 @@
 <script id="comparisonViewTemplate" type="text/x-jquery-tmpl">
 	<div id="visualisation" class="empty"></div>
 	{{each $item.data.datasets}}
-	<div class="dataset" style="width:${calcCols($item.data.datasets.length)}px">	
+	<div class="dataset" title="${$value.dataset.value}" style="width:${calcCols($item.data.datasets.length)}px">	
 		<h3>${getLabel($value, 'dataset')}</h3>
 		<div class="observation_groups accordion">
 			{{each(i, ob_group) groupOn(yankItems($item.data.observations, 'dataset', $value.dataset.value), ol_group_by)}}
 			
-				<h4 class="group_header">
-					${getLabel(ob_group[0], ol_group_by)}&nbsp;
+				<h4 class="group_header" title="${ob_group[0][ol_group_by].value}">
+					<span class="group_label">${getLabel(ob_group[0], ol_group_by)}</span>&nbsp;
 					${ob_group.length} observations
 					{{tmpl({'observations':ob_group}) '#selectObservationGroupButtonTemplate'}}
 				</h4>
@@ -153,7 +149,7 @@
 </script>
 
 <script id="selectObservationGroupButtonTemplate" type="text/x-jquery-tmpl">
-	<button class="group_select" value="${$item.data}" title="Add to comparison">add</button>
+	<button class="group_select" value="" title="Add to comparison">add</button>
 </script>
 
 </body>
