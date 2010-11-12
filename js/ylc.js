@@ -568,4 +568,3 @@ function handle_permalinks() {
 		
 	
 	
-	
