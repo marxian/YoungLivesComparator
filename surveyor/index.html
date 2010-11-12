@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>YoungLives</title>
+
+<!-- CSS Files -->
+<link type="text/css" href="./css/base.css" rel="stylesheet" />
+
+
+
+<!--[if IE]><script language="javascript" type="text/javascript" src="./js/jit/Extras/excanvas.js"></script><![endif]-->
+<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>-->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+<script type="text/javascript" src="./js/ColorUtils-min.js"></script>
+<script type="text/javascript" src="./js/jit/jit.js"></script>
+<script type="text/javascript" src="./js/data.js"></script>
+<script type="text/javascript" src="./js/surveyor.js"></script>
+
+</head>
+
+<body style="width:75%;margin:auto;" onload="yl.init();">
+
+<h1>Young Lives 'Surveyor' Alpha</h1>
+<p>Use the survey bulder to construct a list of questions and press 'Show Responses' to visualise the results. 
+Click on a response group to see the split of their answers to the next question. NB. There's currently no upward navigation - use the 'Show Responses' button to reset.</p>
+
+		<fieldset id="question_controls">
+			<legend>Survey Builder</legend>
+		
+		    <select id="question_chooser"><option value="">Choose a question:</option></select>
+		    <ol id="question_order">
+            </ol>
+		    <button id="build">Show Responses</button>
+		</fieldset>
+
+	
+
+<div id="infovis">
+
+
+</div>
+
+
+
+</body>
+</html>
